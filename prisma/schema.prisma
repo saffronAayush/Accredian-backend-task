@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  referralCode String  @unique @default(uuid()) // Unique referral code
+  referrals   Referral[]
+}
+
+model Referral {
+  id           Int      @id @default(autoincrement())
+  userId       Int      // Foreign key referencing User
+  referredEmail String  @unique
+  coursePlan   String
+  status       String   @default("pending") // "pending" or "completed"
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
