@@ -3,7 +3,7 @@ import { getUserDetails, referCourse } from "../controllers/user.controller.js";
 import { isUserLoggedIn } from "../middlewares/auth.middleware.js";
 const app = express.Router();
 
-app.get("/info", getUserDetails);
+app.get("/info", isUserLoggedIn, getUserDetails);
 app.post("/refercourse", isUserLoggedIn, referCourse);
 
 export default app;

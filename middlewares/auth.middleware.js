@@ -8,7 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 export const isUserLoggedIn = TryCatch(async (req, res, next) => {
   const token = req.cookies.token;
   if (!token)
-    return next(new ErrorHandler(401, "Please Login to access this resource"));
+    return next(new ErrorHandler(401, "Unauthorized: Token not provided"));
 
   const decoded = jwt.verify(token, JWT_SECRET);
   const userId = decoded.userId;

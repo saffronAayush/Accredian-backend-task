@@ -86,12 +86,10 @@ export const oauth2_redirect = (req, res) => {
 
   const token = req.user.token;
   res.cookie("token", token, {
-    httpOnly: true, // Prevents client-side access to the token
-    secure: true, // Ensures cookies are sent only over HTTPS (MUST be true in production)
-    sameSite: "none", // Allows cross-origin requests (if frontend and backend are on different domains)
-    // domain: "yourdomain.com", // Replace with your actual domain
-    // path: "/",       // Makes the cookie accessible across the entire site
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 24 * 60 * 60 * 1000, //in miliseconds (one day)
+    sameSite: "None",
+    httpOnly: true,
+    secure: true,
   });
   res.redirect(`${frontendURL}`);
 };

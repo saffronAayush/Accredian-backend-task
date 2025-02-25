@@ -8,15 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // 4 **GET USER DETAILS**
 export const getUserDetails = TryCatch(async (req, res, next) => {
-  const token = req.cookies?.token;
-
-  if (!token) {
-    return next(new ErrorHandler(401, "Unauthorized: No token provided"));
-  }
-
-  // Verify token
-  const decoded = jwt.verify(token, JWT_SECRET);
-  const userId = decoded.userId;
+  const userId = req.user;
 
   // Fetch user from DB
   const user = await prisma.user.findUnique({
