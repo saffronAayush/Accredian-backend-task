@@ -6,6 +6,7 @@ import { TryCatch } from "./error.middleware.js";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const isUserLoggedIn = TryCatch(async (req, res, next) => {
+  console.log("cookies", req.cookies);
   const token = req.cookies.token;
   if (!token)
     return next(new ErrorHandler(401, "Unauthorized: Token not provided"));
