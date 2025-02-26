@@ -1,10 +1,7 @@
-import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { prisma } from "../prismaClient.js";
 import { TryCatch } from "../middlewares/error.middleware.js";
 import { ErrorHandler } from "../utils/utility.js";
-
-const JWT_SECRET = process.env.JWT_SECRET;
 
 // 4 **GET USER DETAILS**
 export const getUserDetails = TryCatch(async (req, res, next) => {

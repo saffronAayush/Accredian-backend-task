@@ -89,6 +89,7 @@ export const oauth2_redirect = (req, res) => {
     maxAge: 24 * 60 * 60 * 1000, //in miliseconds (one day)
     sameSite: "None",
     secure: true,
+    httpOnly: false,
   });
   res.redirect(`${frontendURL}`);
 };
