@@ -86,10 +86,9 @@ export const oauth2_redirect = (req, res) => {
 
   const token = req.user.token;
   res.cookie("token", token, {
-    maxAge: 24 * 60 * 60 * 1000, //in miliseconds (one day)
-    sameSite: "None",
+    httpOnly: true,
     secure: true,
-    httpOnly: false,
+    sameSite: "None",
   });
   res.redirect(`${frontendURL}`);
 };

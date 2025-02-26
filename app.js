@@ -20,17 +20,18 @@ const callbackURL = `${serverURL}/api/v1/auth/google/callback`;
 
 // Middlewares ***********************************************************
 app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: "16kb",
+  })
+);
+app.use(express.static("public"));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: frontendURL, // Allow frontend domain
-    credentials: true, // Allow cookies
-    methods: ["GET", "POST"],
-    allowedHeaders: [
-      "Access-Control-Allow-Origin",
-      "Content-Type",
-      "Authorization",
-    ],
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
   })
 );
 app.use(passport.initialize());
