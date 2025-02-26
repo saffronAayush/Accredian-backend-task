@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export const isUserLoggedIn = TryCatch(async (req, res, next) => {
   let token = req.query.token;
-  console.log("token ", token);
+  console.log("token ", req.query);
   if (!token) {
     return next(new ErrorHandler(401, "Unauthorized: Token not provided"));
   }
