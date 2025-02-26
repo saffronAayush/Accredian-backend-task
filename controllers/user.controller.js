@@ -12,7 +12,6 @@ export const getUserDetails = TryCatch(async (req, res, next) => {
     where: { id: userId },
     select: {
       id: true,
-      name: true,
     },
   });
 
@@ -35,7 +34,7 @@ export const getUserDetails = TryCatch(async (req, res, next) => {
   // Send Response
   res.status(200).json({
     message: "User details fetched successfully",
-    user: { ...user, totalReferrals, completedReferrals },
+    user: { totalReferrals, completedReferrals },
   });
 });
 
@@ -124,10 +123,10 @@ export const referCourse = TryCatch(async (req, res, next) => {
 
      <div class="content">
        <p>Hi <strong>${receiverName}</strong>,</p>
-       <p><strong>${referrerName}</strong> has referred you to enroll in our <strong>${course}</strong> course!</p>
+       <p><strong>${user.email}</strong> has referred you to enroll in our <strong>${course}</strong> course!</p>
        <p>This is a great opportunity to expand your knowledge and skills. Don't miss out!</p>
        <p>Click on the button bellow to enroll and win refferal cashback</p>
-       <a href="${process.env.SERVER_URL}/api/v1/auth/signuplogin?referralCode=${user.referralCode}" class="button">Enroll Now</a>
+       <a href="${process.env.FRONTEND_URL}?signuplogin=true&referralCode=${user.referralCode}" class="button">Enroll Now</a>
      </div>
 
      <div class="footer">

@@ -1,13 +1,10 @@
 import "dotenv/config";
 import express from "express";
-import passport from "passport";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { errorMiddleware, TryCatch } from "./middlewares/error.middleware.js";
-import { SignupLogin } from "./controllers/auth.controller.js";
 
 // Constants ***********************************************************
 const app = express();
@@ -33,18 +30,6 @@ app.use(
     origin: process.env.FRONTEND_URL,
     credentials: true,
   })
-);
-app.use(passport.initialize());
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID,
-      clientSecret,
-      callbackURL,
-      passReqToCallback: true,
-    },
-    SignupLogin
-  )
 );
 
 // Routes ************************************************************
