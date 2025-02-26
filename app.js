@@ -25,6 +25,12 @@ app.use(
   cors({
     origin: frontendURL, // Allow frontend domain
     credentials: true, // Allow cookies
+    methods: ["GET", "POST"],
+    allowedHeaders: [
+      "Access-Control-Allow-Origin",
+      "Content-Type",
+      "Authorization",
+    ],
   })
 );
 app.use(passport.initialize());
