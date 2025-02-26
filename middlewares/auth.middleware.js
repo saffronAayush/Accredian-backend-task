@@ -6,11 +6,10 @@ import { TryCatch } from "./error.middleware.js";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const isUserLoggedIn = TryCatch(async (req, res, next) => {
+  let token = req.query.token;
+  console.log("token ", token);
   if (!token) {
-    token = req.query.token;
-    console.log("in ", token);
-    if (!token)
-      return next(new ErrorHandler(401, "Unauthorized: Token not provided"));
+    return next(new ErrorHandler(401, "Unauthorized: Token not provided"));
   }
   const decoded = jwt.verify(token, JWT_SECRET);
   const userId = decoded.userId;
