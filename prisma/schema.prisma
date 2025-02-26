@@ -18,7 +18,7 @@ model User {
 model Referral {
   id           Int      @id @default(autoincrement())
   userId       Int      // Foreign key referencing User
-  referredEmail String  @unique
+  referredEmail String  
   coursePlan   String
   status       String   @default("pending") // "pending" or "completed"
   createdAt    DateTime @default(now())

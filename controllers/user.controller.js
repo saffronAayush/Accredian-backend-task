@@ -1,9 +1,9 @@
-import nodemailer from "nodemailer";
 import { prisma } from "../prismaClient.js";
 import { TryCatch } from "../middlewares/error.middleware.js";
 import { ErrorHandler } from "../utils/utility.js";
+import { sendMail } from "../utils/features.js";
 
-// 4 **GET USER DETAILS**
+// **GET USER DETAILS**    **********************************************************************************************
 export const getUserDetails = TryCatch(async (req, res, next) => {
   const userId = req.user;
 
@@ -38,48 +38,17 @@ export const getUserDetails = TryCatch(async (req, res, next) => {
   });
 });
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER, // Your Gmail address
-    pass: process.env.GMAIL_PASS, // Your Gmail password or App Password
-  },
-});
-
-// Function to send an email
-const sendMail = async (to, subject, text) => {
-  try {
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to,
-      subject,
-      html: text,
-    };
-
-    const result = await transporter.sendMail(mailOptions);
-
-    return result;
-  } catch (error) {
-    console.error("Error sending email: ", error);
-    throw error;
-  }
-};
-
+// Refers a Course ******************************************************************************************************
 export const referCourse = TryCatch(async (req, res, next) => {
-  const { referrerName, receiverName, email, course } = req.body;
+  const { receiverName, email, course } = req.body;
   const referrerId = req.user;
 
-  // Check if the email already exists in the User table
-  const existingUser = await prisma.user.findUnique({
-    where: { email: email },
-    select: { id: true },
-  });
-
-  if (existingUser) {
-    return next(new ErrorHandler(400, "Cannot refer to an existing user"));
-  }
-  const existingReferral = await prisma.referral.findUnique({
-    where: { referredEmail: email },
+  const existingReferral = await prisma.referral.findFirst({
+    where: {
+      referredEmail: email,
+      userId: referrerId,
+      coursePlan: course,
+    },
   });
 
   if (!existingReferral) {
@@ -92,14 +61,18 @@ export const referCourse = TryCatch(async (req, res, next) => {
         status: "pending",
       },
     });
+  } else {
+    return next(new ErrorHandler(400, "Cannot refer to an existing user"));
   }
+
   const user = await prisma.user.findUnique({
     where: { id: referrerId },
     select: {
       referralCode: true,
+      email: true,
     },
   });
-  console.log("user refreal", user.referralCode);
+
   // Generate HTML email content
   const htmlContent = `
  <!DOCTYPE html>
